@@ -1,26 +1,39 @@
 import { isLoggedIn, login, logout, getChannelTags } from './modules/rest.service.js';
 import { $$, hide, show } from './modules/utils.js';
 
-const load = () => {
-    getChannelTags().then((channelIds) => console.log(channelIds));
+const load = async () => {
+    try {
+        const channelIds = await getChannelTags();
+        console.log(channelIds);
+    } catch(error) {
+
+    }
 }
 
-const checkIsLoggedIn = () => {
-    isLoggedIn()
-        .then((isLoggedIn) => { 
-            if(isLoggedIn) {
-                hide($$("loginComponent"));
-                show($$("logoutComponent"));
-                load();
-            } else {
-                show($$("loginComponent"));
-                hide($$("logoutComponent"));
-            }
-        })
-        .catch((error) => { 
-            show($$("loginComponent"));
-            hide($$("logoutComponent"));
-        });
+const hideLogin = () => {
+    hide($$("loginComponent"));
+    show($$("logoutComponent"));
+}
+
+const showLogin = () => {
+    show($$("loginComponent"));
+    hide($$("logoutComponent"));
+}
+
+const checkIsLoggedIn = async () => {
+    
+    
+    try {
+        if(await isLoggedIn()) {
+            hideLogin();
+            load();
+        } else {
+            showLogin();
+        }
+    } catch (error) {
+        console.log(error);
+        showLogin();
+    }
 };
 
 checkIsLoggedIn();
@@ -31,8 +44,7 @@ $$("loginForm").addEventListener("submit", (event) => {
     const username = $$("usernameInput")?.value;
     const password = $$("passwordInput")?.value;
 
-    login(username, password)
-        .then((response) => checkIsLoggedIn())
+    login(username, password).then((response) => checkIsLoggedIn());
 });
 
-$$("logoutButton").addEventListener("click", () => logout() && show($$("loginComponent")) && hide($$("logoutComponent")));
+$$("logoutButton").addEventListener("click", () => logout() && showLogin());
