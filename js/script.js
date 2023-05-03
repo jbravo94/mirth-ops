@@ -1,39 +1,21 @@
-import { loginForm, usernameInput, passwordInput} from './modules/selectors.js';
+import { isLoggedIn } from './modules/rest.service.js';
+import { $$, hide, show } from './modules/utils.js';
 
-fetch('/api/users/current', {headers: {
-    "Accept": "application/json"
-  }})
-    .then(
-        function (response) {
-            if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                    response.status);
-                return;
-            }
+isLoggedIn
+.then((isLoggedIn) => {isLoggedIn ? hide($$("loginComponent")) : show($$("loginComponent"))})
+.catch((error) => {show($$("loginComponent"))});
 
-            // Examine the text in the response
-            response.json().then(function (data) {
-                console.log(data);
-            });
-        }
-    )
-    .catch(function (err) {
-        console.log('Fetch Error :-S', err);
-    });
-
-
-
-loginForm.addEventListener("submit", function(event) {
+$$("loginForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-console.log("clock");
     fetch('/api/users/_login', {method: 'POST',
     headers:{
-      'Content-Type': 'application/x-www-form-urlencoded'
+        "Accept": "application/json",
+        'Content-Type': 'application/x-www-form-urlencoded'
     },    
     body: new URLSearchParams({
-        'username': usernameInput?.value,
-        'password': passwordInput?.value
+        'username': $$("usernameInput")?.value,
+        'password': $$("passwordInput")?.value
     })})
         .then(
             function (response) {
