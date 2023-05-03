@@ -15,24 +15,42 @@ export const logout = () => fetch('/api/users/_logout', {
     method: 'POST',
 });
 
-export const getChannelTags = () => fetch(
-    '/api/server/channelTags'
-).then((response) => response.text()).then((text) => {
+export const getChannelTags = () => fetch('/api/server/channelTags')
+    .then((response) => response.text())
+    .then((text) => {
 
-    const channelIds = [];
+        const channelIds = [];
 
-    var parser = new DOMParser();
+        var parser = new DOMParser();
+        var xmlDocument = parser.parseFromString(text, "text/xml");
 
-    var xmlDocument = parser.parseFromString(text, "text/xml");
+        const nodes = xmlDocument.evaluate("//set/channelTag[name='OPS']/channelIds/string/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);
+        let node = nodes.iterateNext();
 
-    const nodes = xmlDocument.evaluate("//set/channelTag[name='OPS']/channelIds/string/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);
+        while (node) {
+            channelIds.push(node.nodeValue);
+            node = nodes.iterateNext();
+        }
 
-    let node = nodes.iterateNext();
+        return channelIds;
+    });
 
-    while(node) {
-        channelIds.push(node.nodeValue);
-        node = nodes.iterateNext();
-    }
-
-    return channelIds;
+export const startChannel = (channelId) => fetch('/api/channels/' + channelId + '/_start', {
+    method: 'POST',
 });
+
+export const stopChannel = (channelId) => fetch('/api/channels/' + channelId + '/_stop', {
+    method: 'POST',
+});
+
+export const getChannel = (channelId) => fetch('/api/channels')
+    .then((response) => response.text())
+    .then((xmlResponse) => {
+        return xmlResponse;
+    });
+
+export const getChannelStatus = (channelId) => fetch('/api/extensions/dashboardstatus/channelStates/' + channelId)
+    .then((response) => response.text())
+    .then((status) => {
+        return status;
+    });
