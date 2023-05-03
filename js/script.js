@@ -4,25 +4,36 @@ import { $$, hide, show } from './modules/utils.js';
 const load = async () => {
     try {
         const channelIds = await getChannelTags();
-        console.log(channelIds);
-    } catch(error) {
 
+        const operationsTable = document.createElement("table");
+        const operationTableHeaderRow = document.createElement("tr");
+
+        const headerNames = ['Channel Name', 'Channel ID', 'Channel Status', 'Connection Status', 'Start Channel', 'Stop Channel'];
+
+        operationTableHeaderRow.append(...headerNames.map(h => Object.assign(document.createElement('th'), { innerHTML : h })));
+
+        operationsTable.appendChild(operationTableHeaderRow);
+
+        for (let i = 0; i < channelIds.length; i++) {
+            const operationTableRow = document.createElement("tr");
+        }
+
+        $$("operationsTableContainer").appendChild(operationsTable);
+    } catch(error) {
     }
 }
 
 const hideLogin = () => {
     hide($$("loginComponent"));
-    show($$("logoutComponent"));
+    show($$("operationsComponent"));
 }
 
 const showLogin = () => {
     show($$("loginComponent"));
-    hide($$("logoutComponent"));
+    hide($$("operationsComponent"));
 }
 
 const checkIsLoggedIn = async () => {
-    
-    
     try {
         if(await isLoggedIn()) {
             hideLogin();
