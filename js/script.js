@@ -1,10 +1,26 @@
-import { isLoggedIn, login, logout } from './modules/rest.service.js';
+import { isLoggedIn, login, logout, getChannelTags } from './modules/rest.service.js';
 import { $$, hide, show } from './modules/utils.js';
+
+const load = () => {
+    getChannelTags().then((channelIds) => console.log(channelIds));
+}
 
 const checkIsLoggedIn = () => {
     isLoggedIn()
-        .then((isLoggedIn) => { isLoggedIn ? hide($$("loginComponent")) && show($$("logoutComponent")) : show($$("loginComponent")) && hide($$("logoutComponent"))})
-        .catch((error) => { show($$("loginComponent")) && hide($$("logoutComponent")) });
+        .then((isLoggedIn) => { 
+            if(isLoggedIn) {
+                hide($$("loginComponent"));
+                show($$("logoutComponent"));
+                load();
+            } else {
+                show($$("loginComponent"));
+                hide($$("logoutComponent"));
+            }
+        })
+        .catch((error) => { 
+            show($$("loginComponent"));
+            hide($$("logoutComponent"));
+        });
 };
 
 checkIsLoggedIn();
