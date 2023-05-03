@@ -1,3 +1,5 @@
+const parser = new DOMParser();
+
 export const isLoggedIn = () => fetch('/api/users/current').then((response) => response.status === 200);
 
 export const login = (username, password) => fetch('/api/users/_login', {
@@ -21,8 +23,7 @@ export const getChannelTags = () => fetch('/api/server/channelTags')
 
         const channelIds = [];
 
-        var parser = new DOMParser();
-        var xmlDocument = parser.parseFromString(text, "text/xml");
+        const xmlDocument = parser.parseFromString(text, "text/xml");
 
         const nodes = xmlDocument.evaluate("//set/channelTag[name='OPS']/channelIds/string/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);
         let node = nodes.iterateNext();
@@ -43,13 +44,36 @@ export const stopChannel = (channelId) => fetch('/api/channels/' + channelId + '
     method: 'POST',
 });
 
-export const getChannel = (channelId) => fetch('/api/channels')
+export const getChannel = (channelId) => fetch('/api/channels/' + channelId)
     .then((response) => response.text())
     .then((xmlResponse) => {
         return xmlResponse;
     });
 
-export const getChannelStatus = (channelId) => fetch('/api/extensions/dashboardstatus/channelStates/' + channelId)
+export const getChannelName = (channelId) => getChannel(channelId)
+    .then((text) => {
+        
+        const xmlDocument = parser.parseFromString(text, "text/xml");
+
+        const nodes = xmlDocument.evaluate("//channel/name/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);
+        let node = nodes.iterateNext();
+
+        return node.nodeValue;
+    });
+
+export const getChannelStatus = (channelId) => fetch('/api/channels/' + channelId + '/status')
+    .then((response) => response.text())
+    .then((text) => {
+
+        const xmlDocument = parser.parseFromString(text, "text/xml");
+
+        const nodes = xmlDocument.evaluate("//dashboardStatus/state/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);
+        let node = nodes.iterateNext();
+
+        return node.nodeValue;
+    });
+
+export const getConnectionStatus = (channelId) => fetch('/api/extensions/dashboardstatus/channelStates/' + channelId)
     .then((response) => response.text())
     .then((status) => {
         return status;

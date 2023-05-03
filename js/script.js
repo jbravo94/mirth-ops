@@ -1,4 +1,4 @@
-import { isLoggedIn, login, logout, getChannelTags } from './modules/rest.service.js';
+import { isLoggedIn, login, logout, getChannelTags, getConnectionStatus, getChannelStatus, getChannelName } from './modules/rest.service.js';
 import { $$, hide, show } from './modules/utils.js';
 
 const load = async () => {
@@ -15,11 +15,30 @@ const load = async () => {
         operationsTable.appendChild(operationTableHeaderRow);
 
         for (let i = 0; i < channelIds.length; i++) {
+            const cid = channelIds[i];
+
             const operationTableRow = document.createElement("tr");
+            const channelName = Object.assign(document.createElement("td"), {id: "channelName-" + i});
+            getChannelName(cid).then((text) => $$("channelName-" + i).innerHTML = text);
+
+            const channelId = Object.assign(document.createElement("td"), {id: "channelId-" + i, innerHTML: cid});
+
+            const channelStatus = Object.assign(document.createElement("td"), {id: "channelStatus-" + i});
+            getChannelStatus(cid).then((text) => $$("channelStatus-" + i).innerHTML = text);
+
+            const connectionStatus = Object.assign(document.createElement("td"), {id: "connectionStatus-" + i});
+            getConnectionStatus(cid).then((text) => $$("connectionStatus-" + i).innerHTML = text);
+
+            const startChannel = Object.assign(document.createElement("td"), {id: "startChannel-" + i});
+            const stopChannel = Object.assign(document.createElement("td"), {id: "stopChannel-" + i});
+
+            operationTableRow.append(channelName, channelId, channelStatus, connectionStatus, startChannel, stopChannel);
+            operationsTable.appendChild(operationTableRow);
         }
 
         $$("operationsTableContainer").appendChild(operationsTable);
     } catch(error) {
+        console.log(error);
     }
 }
 
