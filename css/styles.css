@@ -7,7 +7,7 @@
 }
 
 .div-center {
-  width: 400px;
+  min-width: 400px;
   min-height: 250px;
   background-color: #fff;
   position: absolute;
@@ -30,19 +30,9 @@ div.content {
   display: none;
 }
 
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.box div {
-  width: 400px;
-  height: 400px;
-}
-
 table {
   text-align: center;
+  max-width: 800px;
 }
 
 td {
@@ -56,9 +46,15 @@ td {
   align-items: center; 
   aspect-ratio: 1 / 1;
   font-size: 25px;
+  margin: 5px;
 }
 
 .footer-actions {
   display: flex; 
   justify-content: space-between;
+}
+
+label {
+  display: inline-block;
+  min-width: 75px;
 }
