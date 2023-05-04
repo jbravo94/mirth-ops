@@ -1,5 +1,5 @@
-import { isLoggedIn, login, logout, getChannelTags, getConnectionStatus, getChannelStatus, getChannelName } from './modules/rest.service.js';
-import { $$, hide, show } from './modules/utils.js';
+import { isLoggedIn, login, logout, getChannelTags, getConnectionStatus, getChannelStatus, getChannelName, startChannel, stopChannel } from './modules/rest.service.js';
+import { $$, enable, disable, hide, show } from './modules/utils.js';
 
 const load = async () => {
     try {
@@ -24,16 +24,31 @@ const load = async () => {
             const channelId = Object.assign(document.createElement("td"), {id: "channelId-" + i, innerHTML: cid});
 
             const channelStatus = Object.assign(document.createElement("td"), {id: "channelStatus-" + i});
-            getChannelStatus(cid).then((text) => $$("channelStatus-" + i).innerHTML = text);
-
             const connectionStatus = Object.assign(document.createElement("td"), {id: "connectionStatus-" + i});
-            getConnectionStatus(cid).then((text) => $$("connectionStatus-" + i).innerHTML = text);
 
-            const startChannel = Object.assign(document.createElement("td"), {id: "startChannel-" + i, innerHTML: '<button class="btn btn-success action" disabled><i class="bi bi-play-circle-fill"></i></button>'});
-            const stopChannel = Object.assign(document.createElement("td"), {id: "stopChannel-" + i, innerHTML: '<button class="btn btn-danger action" disabled><i class="bi bi-stop-circle-fill"></i></button>'});
+            const startChannelAction = Object.assign(document.createElement("td"), {id: "startChannel-" + i, innerHTML: `<button id="startChannel-button-${i}" class="btn btn-success action" disabled><i class="bi bi-play-circle-fill"></i></button>`});
+            const stopChannelAction = Object.assign(document.createElement("td"), {id: "stopChannel-" + i, innerHTML: `<button id="stopChannel-button-${i}" class="btn btn-danger action" disabled><i class="bi bi-stop-circle-fill"></i></button>`});
 
-            operationTableRow.append(channelName, channelId, channelStatus, connectionStatus, startChannel, stopChannel);
+            operationTableRow.append(channelName, channelId, channelStatus, connectionStatus, startChannelAction, stopChannelAction);
             operationsTable.appendChild(operationTableRow);
+
+            getChannelStatus(cid).then((text) => {
+                $$("channelStatus-" + i).innerHTML = text;
+
+                $$("startChannel-button-" + i).onclick = () => { startChannel(cid); load(); };
+                $$("stopChannel-button-" + i).onclick = () => { stopChannel(cid); load(); };
+
+                if (text === "STOPPED") {
+                    enable($$("startChannel-button-" + i));
+                    disable($$("stopChannel-button-" + i));
+                } else {
+                    disable($$("startChannel-button-" + i));
+                    enable($$("stopChannel-button-" + i));
+                }
+
+            });
+
+            getConnectionStatus(cid).then((text) => $$("connectionStatus-" + i).innerHTML = text);
         }
 
         $$("operationsTableContainer").replaceChildren(operationsTable);
