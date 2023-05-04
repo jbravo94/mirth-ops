@@ -40,6 +40,19 @@ div.content {
   height: 400px;
 }
 
+table {
+  text-align: center;
+}
+
 td {
   border-width: 1;
+}
+
+.action {
+  align-self: center;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center; 
+  aspect-ratio: 1 / 1;
+  font-size: 25px;
 }

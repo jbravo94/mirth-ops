@@ -29,14 +29,14 @@ const load = async () => {
             const connectionStatus = Object.assign(document.createElement("td"), {id: "connectionStatus-" + i});
             getConnectionStatus(cid).then((text) => $$("connectionStatus-" + i).innerHTML = text);
 
-            const startChannel = Object.assign(document.createElement("td"), {id: "startChannel-" + i});
-            const stopChannel = Object.assign(document.createElement("td"), {id: "stopChannel-" + i});
+            const startChannel = Object.assign(document.createElement("td"), {id: "startChannel-" + i, innerHTML: '<button class="btn btn-success action" disabled><i class="bi bi-play-circle-fill"></i></button>'});
+            const stopChannel = Object.assign(document.createElement("td"), {id: "stopChannel-" + i, innerHTML: '<button class="btn btn-danger action" disabled><i class="bi bi-stop-circle-fill"></i></button>'});
 
             operationTableRow.append(channelName, channelId, channelStatus, connectionStatus, startChannel, stopChannel);
             operationsTable.appendChild(operationTableRow);
         }
 
-        $$("operationsTableContainer").appendChild(operationsTable);
+        $$("operationsTableContainer").replaceChildren(operationsTable);
     } catch(error) {
         console.log(error);
     }
