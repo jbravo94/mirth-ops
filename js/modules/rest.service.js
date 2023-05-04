@@ -52,7 +52,7 @@ export const getChannel = (channelId) => fetch('/api/channels/' + channelId)
 
 export const getChannelName = (channelId) => getChannel(channelId)
     .then((text) => {
-        
+
         const xmlDocument = parser.parseFromString(text, "text/xml");
 
         const nodes = xmlDocument.evaluate("//channel/name/text()", xmlDocument, null, XPathResult.ANY_TYPE, null);

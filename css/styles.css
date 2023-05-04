@@ -43,14 +43,14 @@ td {
   align-self: center;
   border-radius: 50%;
   display: inline-flex;
-  align-items: center; 
+  align-items: center;
   aspect-ratio: 1 / 1;
   font-size: 25px;
   margin: 5px;
 }
 
 .footer-actions {
-  display: flex; 
+  display: flex;
   justify-content: space-between;
 }
 
