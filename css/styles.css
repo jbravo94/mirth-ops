@@ -56,3 +56,8 @@ td {
   aspect-ratio: 1 / 1;
   font-size: 25px;
 }
+
+.footer-actions {
+  display: flex; 
+  justify-content: space-between;
+}

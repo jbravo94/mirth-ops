@@ -93,3 +93,5 @@ $$("loginForm").addEventListener("submit", (event) => {
 });
 
 $$("logoutButton").addEventListener("click", () => logout() && showLogin());
+
+$$("refreshButton").addEventListener("click", () => load());

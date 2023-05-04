@@ -11,7 +11,7 @@
 <body>
 	<div class="back">
 
-		<div  class="div-center">
+		<div class="div-center">
 			<div id="loginComponent" class="content">
 				<h3>Login</h3>
 				<hr />
@@ -27,17 +27,39 @@
 					
 					<br>
 
-					<button id="loginButton" type="submit" class="btn btn-primary">Login</button>
+					<div class="footer-actions">
+						<button id="loginButton" type="submit" class="btn btn-primary">
+							<i class="bi bi-box-arrow-in-right"></i>
+							Login
+						</button>
+					</div>
 				</form>
 			</div>
 
 			<div id="operationsComponent" class="content">
 
+				<h3>Operation Dashboard</h3>
+
+				<hr />
+
 				<div id="operationsTableContainer"></div>
 
 				<br>
 
-				<button id="logoutButton" class="btn btn-primary">Logout</button>
+				<div class="footer-actions">
+
+					<button id="logoutButton" class="btn btn-primary">
+						<i class="bi bi-box-arrow-right"></i>
+						Logout
+					</button>
+
+					<button id="refreshButton" class="btn btn-secondary">
+						<i class="bi bi-arrow-clockwise"></i>
+						Refresh
+					</button>
+
+				</div>
+			</div>
 			</div>
 
 		</div>
